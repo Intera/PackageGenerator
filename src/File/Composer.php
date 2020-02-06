@@ -23,7 +23,7 @@ class Composer extends AbstractFile
         echo PHP_EOL . sprintf('%s::%s: %s', __METHOD__, __LINE__, 'About to generate compose.json file');
         $composer = new Application();
         $composer->setAutoExit(false);
-        $composer->run(new ArrayInput([
+        $result = $composer->run(new ArrayInput([
             'command' => 'init',
             '--verbose' => true,
             '--no-interaction' => true,
@@ -37,19 +37,20 @@ class Composer extends AbstractFile
             ],
             '--working-dir' => $this->getGenerator()->getOptionDestination(),
         ]));
-        echo PHP_EOL . sprintf('%s::%s: %s', __METHOD__, __LINE__, 'compose.json file generated');
+        echo PHP_EOL . sprintf('%s::%s: %s => %s', __METHOD__, __LINE__, 'compose.json file generated', var_export($result, true));
         $this->completeComposerJson();
         echo PHP_EOL . sprintf('%s::%s: %s', __METHOD__, __LINE__, 'compose.json file updated, about ot install/update deps');
         if ($this->getRunComposerUpdate() === true) {
-            return $composer->run(new ArrayInput([
+            $result = $composer->run(new ArrayInput([
                 'command' => 'update',
                 '--verbose' => true,
                 '--optimize-autoloader' => true,
                 '--no-dev' => true,
                 '--working-dir' => $this->getGenerator()->getOptionDestination(),
             ]));
+            echo PHP_EOL . sprintf('%s::%s: %s => %s', __METHOD__, __LINE__, 'deps installed/updated', var_export($result, true));
+            return $result;
         }
-        echo PHP_EOL . sprintf('%s::%s: %s', __METHOD__, __LINE__, 'deps installed/updated');
     }
     /**
      * @return Composer
