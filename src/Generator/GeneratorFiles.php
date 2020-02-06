@@ -114,6 +114,8 @@ class GeneratorFiles extends AbstractGeneratorAware
         if ($this->generator->getOptionStandalone() === true) {
             $composerFile = new ComposerFile($this->generator, 'composer');
             $composerFile->write();
+        } else {
+            echo PHP_EOL . sprintf('%s::%s: %s %s', __METHOD__, __LINE__, 'Standalone option value is', var_export($this->generator->getOptionStandalone(), true));
         }
         return $this;
     }

@@ -20,6 +20,7 @@ class Composer extends AbstractFile
      */
     protected function writeFile()
     {
+        echo PHP_EOL . sprintf('%s::%s: %s', __METHOD__, __LINE__, 'About to generate compose.json file');
         $composer = new Application();
         $composer->setAutoExit(false);
         $composer->run(new ArrayInput([
@@ -36,7 +37,9 @@ class Composer extends AbstractFile
             ],
             '--working-dir' => $this->getGenerator()->getOptionDestination(),
         ]));
+        echo PHP_EOL . sprintf('%s::%s: %s', __METHOD__, __LINE__, 'compose.json file generated');
         $this->completeComposerJson();
+        echo PHP_EOL . sprintf('%s::%s: %s', __METHOD__, __LINE__, 'compose.json file updated, about ot install/update deps');
         if ($this->getRunComposerUpdate() === true) {
             return $composer->run(new ArrayInput([
                 'command' => 'update',
@@ -46,6 +49,7 @@ class Composer extends AbstractFile
                 '--working-dir' => $this->getGenerator()->getOptionDestination(),
             ]));
         }
+        echo PHP_EOL . sprintf('%s::%s: %s', __METHOD__, __LINE__, 'deps installed/updated');
     }
     /**
      * @return Composer
