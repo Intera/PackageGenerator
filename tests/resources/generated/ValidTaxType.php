@@ -284,7 +284,7 @@ class ApiTaxType extends AbstractStructBase
             throw new \InvalidArgumentException(sprintf('Invalid value %s, please provide a float value, %s given', var_export($amount, true), gettype($amount)), __LINE__);
         }
         // validation for constraint: fractionDigits(3)
-        if (!is_null($amount) && mb_strlen(mb_substr($amount, mb_strpos($amount, '.') + 1)) > 3) {
+        if (!is_null($amount) && mb_strlen(mb_substr($amount, false !== mb_strpos($amount, '.') ? mb_strpos($amount, '.') + 1 : mb_strlen($amount))) > 3) {
             throw new \InvalidArgumentException(sprintf('Invalid value %s, the value must at most contain 3 fraction digits, %d given', var_export($amount, true), mb_strlen(mb_substr($amount, mb_strpos($amount, '.') + 1))), __LINE__);
         }
         $this->Amount = $amount;
@@ -337,25 +337,5 @@ class ApiTaxType extends AbstractStructBase
         }
         $this->DecimalPlaces = $decimalPlaces;
         return $this;
-    }
-    /**
-     * Method called when an object has been exported with var_export() functions
-     * It allows to return an object instantiated with the values
-     * @see AbstractStructBase::__set_state()
-     * @uses AbstractStructBase::__set_state()
-     * @param array $array the exported values
-     * @return \Api\StructType\ApiTaxType
-     */
-    public static function __set_state(array $array)
-    {
-        return parent::__set_state($array);
-    }
-    /**
-     * Method returning the class name
-     * @return string __CLASS__
-     */
-    public function __toString()
-    {
-        return __CLASS__;
     }
 }

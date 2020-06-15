@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 3.2.7 - 2020-05-22
+- issue #170 - Enhance generated classes based on PackageBase updates
+- Minor typo
+- Update contributors list
+
+## 3.2.6 - 2020-03-23
+- issue #210 - Validation for constraint: fractionDigits fails for integer numbers (0 fraction digits)
+
+## 3.2.5 - 2020-03-12
+- issue #209 - Name "0" is invalid when instantiating PhpFunctionParameter object
+
+## 3.2.4 - 2020-03-12
+- issue #208 - not able to use with symfony/console v5+
+
 ## 3.2.3 - 2019-08-19
 - issue #200 - Array structures are missing from generated package
 - issue #201 - Do not generate empty constructor
