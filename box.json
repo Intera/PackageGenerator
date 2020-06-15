@@ -31,6 +31,15 @@
                 "tests"
             ],
             "in": "vendor/composer/composer"
+        },
+        {
+            "name": "cacert.pem",
+            "exclude": [
+                "phpunit",
+                "Tests",
+                "tests"
+            ],
+            "in": "vendor/composer/ca-bundle/res"
         }
     ],
     "files": [
