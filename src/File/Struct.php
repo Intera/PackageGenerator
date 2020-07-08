@@ -3,6 +3,7 @@
 namespace WsdlToPhp\PackageGenerator\File;
 
 use WsdlToPhp\PackageGenerator\Model\AbstractModel;
+use WsdlToPhp\PackageGenerator\Model\StructAttribute;
 use WsdlToPhp\PackageGenerator\Model\StructAttribute as StructAttributeModel;
 use WsdlToPhp\PackageGenerator\Model\Struct as StructModel;
 use WsdlToPhp\PackageGenerator\Container\PhpElement\Property as PropertyContainer;
@@ -18,6 +19,25 @@ use WsdlToPhp\PackageGenerator\File\Element\PhpFunctionParameter;
 
 class Struct extends AbstractModelFile
 {
+    public function removeInheritedAttributes()
+    {
+        $parentStruct = $this->getModel()->getInheritanceStruct();
+        if (!$parentStruct) {
+            return $this;
+        }
+        /** @var StructAttribute $parentAttribute */
+        foreach ($parentStruct->getAttributes() as $parentAttribute) {
+            $attributes = $this->getModel()->getAttributes();
+            foreach ($attributes as $index => $attribute) {
+                if ($attribute->getName() === $parentAttribute->getName()) {
+                    $attributes->offsetUnset($index);
+                    break;
+                }
+            }
+        }
+        return $this;
+    }
+
     /**
      * @see \WsdlToPhp\PackageGenerator\File\AbstractModelFile::getClassConstants()
      */
