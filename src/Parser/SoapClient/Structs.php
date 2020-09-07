@@ -20,16 +20,41 @@ class Structs extends AbstractParser
      * @var string
      */
     const ANY_XML_TYPE = '\DOMDocument';
+
+    /**
+     * @var string[]
+     */
+    protected static $duplicateStructs = [];
+
     /**
      * @var string[]
      */
     protected $definedStructs = [];
+
+    /**
+     * @return string[]
+     */
+    public static function getDuplicateStructs(): array
+    {
+        return self::$duplicateStructs;
+    }
+
+    /**
+     * @param string[] $duplicateStructs
+     */
+    public static function setDuplicateStructs(array $duplicateStructs): void
+    {
+        self::$duplicateStructs = $duplicateStructs;
+    }
+
     /**
      * Parses the SoapClient types
      * @see \WsdlToPhp\PackageGenerator\Parser\ParserInterface::parse()
      */
     public function parse()
     {
+        self::$duplicateStructs = [];
+
         $types = $this->getGenerator()
             ->getSoapClient()
             ->getSoapClient()
@@ -52,7 +77,11 @@ class Structs extends AbstractParser
                 if ($typeDef[0] === self::UNION_DECLARATION) {
                     $this->parseUnionStruct($typeDef);
                 } elseif ($typeDef[0] === self::STRUCT_DECLARATION) {
-                    $this->parseComplexStruct($typeDef);
+                    if ($this->getGenerator()->getStructByName($structName)) {
+                        self::$duplicateStructs[] = $structName;
+                    } else {
+                        $this->parseComplexStruct($typeDef);
+                    }
                 } else {
                     $this->getGenerator()->getStructs()->addVirtualStruct($structName, $typeDef[0]);
                 }
